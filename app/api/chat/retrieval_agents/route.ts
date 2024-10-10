@@ -1,8 +1,8 @@
+import { StreamingTextResponse, Message as VercelChatMessage } from "ai";
 import { NextRequest, NextResponse } from "next/server";
-import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
 
-import { createClient } from "@supabase/supabase-js";
 
+import { bbaClient } from "@/lib/supabase";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import {
   AIMessage,
@@ -11,9 +11,9 @@ import {
   HumanMessage,
   SystemMessage,
 } from "@langchain/core/messages";
+import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { createRetrieverTool } from "langchain/tools/retriever";
-import { createReactAgent } from "@langchain/langgraph/prebuilt";
 
 export const runtime = "edge";
 
@@ -72,12 +72,8 @@ export async function POST(req: NextRequest) {
       temperature: 0.2,
     });
 
-    const client = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_PRIVATE_KEY!,
-    );
     const vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
-      client,
+      client: bbaClient,
       tableName: "documents",
       queryName: "match_documents",
     });

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+import { NextRequest, NextResponse } from "next/server";
 
-import { createClient } from "@supabase/supabase-js";
+import { bbaClient } from "@/lib/supabase";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
@@ -34,10 +34,6 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const client = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_PRIVATE_KEY!,
-    );
 
     const splitter = RecursiveCharacterTextSplitter.fromLanguage("markdown", {
       chunkSize: 256,
@@ -50,7 +46,7 @@ export async function POST(req: NextRequest) {
       splitDocuments,
       new OpenAIEmbeddings(),
       {
-        client,
+        client: bbaClient,
         tableName: "documents",
         queryName: "match_documents",
       },

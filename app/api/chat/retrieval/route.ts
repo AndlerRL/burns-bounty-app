@@ -1,17 +1,17 @@
+import { StreamingTextResponse, Message as VercelChatMessage } from "ai";
 import { NextRequest, NextResponse } from "next/server";
-import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
 
-import { createClient } from "@supabase/supabase-js";
 
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-import { PromptTemplate } from "@langchain/core/prompts";
+import { bbaClient } from "@/lib/supabase";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { Document } from "@langchain/core/documents";
-import { RunnableSequence } from "@langchain/core/runnables";
 import {
   BytesOutputParser,
   StringOutputParser,
 } from "@langchain/core/output_parsers";
+import { PromptTemplate } from "@langchain/core/prompts";
+import { RunnableSequence } from "@langchain/core/runnables";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 
 export const runtime = "edge";
 
@@ -79,12 +79,8 @@ export async function POST(req: NextRequest) {
       temperature: 0.2,
     });
 
-    const client = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_PRIVATE_KEY!,
-    );
     const vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
-      client,
+      client: bbaClient,
       tableName: "documents",
       queryName: "match_documents",
     });
