@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.27;
 
+import "@openzeppelin/contracts/utils/math/Math.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
 contract TaskContract is ReentrancyGuard {
-    using Counters for Counters.Counter;
     using ECDSA for bytes32;
 
-    Counters.Counter private _taskIds;
+    uint256 private _taskIds;
 
     struct Task {
         uint256 id;
@@ -44,8 +44,8 @@ contract TaskContract is ReentrancyGuard {
     ) external payable returns (uint256) {
         require(msg.value > 0, "Bounty must be greater than 0");
 
-        _taskIds.increment();
-        uint256 newTaskId = _taskIds.current();
+        _taskIds += 1;
+        uint256 newTaskId = _taskIds;
 
         Task storage newTask = tasks[newTaskId];
         newTask.id = newTaskId;
@@ -75,6 +75,7 @@ contract TaskContract is ReentrancyGuard {
             "Task already fully signed"
         );
 
+        // Crear el mensaje hash
         bytes32 messageHash = keccak256(
             abi.encodePacked(
                 task.id,
@@ -84,8 +85,12 @@ contract TaskContract is ReentrancyGuard {
                 task.agreementHash
             )
         );
-        bytes32 ethSignedMessageHash = messageHash.toEthSignedMessageHash();
-        address signer = ethSignedMessageHash.recover(_signature);
+
+        // Usar ECDSA para recuperar la firma
+        bytes32 ethSignedMessageHash = MessageHashUtils.toEthSignedMessageHash(
+            messageHash
+        );
+        address signer = ECDSA.recover(ethSignedMessageHash, _signature);
 
         require(signer == msg.sender, "Invalid signature");
 
