@@ -1,15 +1,21 @@
-import "./globals.css";
 import { Public_Sans } from "next/font/google";
+import "./globals.css";
 
+import { Providers } from "@/app/providers";
 import { Navbar } from "@/components/Navbar";
 
 const publicSans = Public_Sans({ subsets: ["latin"] });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // const responseHeaders = (await headers()).get("cookie")
+  // const initialState = cookieToInitialState(
+  //   getConfig(),
+  //   responseHeaders,
+  // );
   return (
     <html lang="en">
       <head>
@@ -34,10 +40,13 @@ export default function RootLayout({
         <meta name="twitter:image" content="/images/og-image.png" />
       </head>
       <body className={publicSans.className}>
-        <div className="flex flex-col p-4 md:p-12 h-[100vh]">
-          <Navbar></Navbar>
-          {children}
-        </div>
+        {/* <Providers initialState={initialState}> */}
+        <Providers>
+          <div className="flex flex-col p-4 md:p-12 h-[100vh]">
+            <Navbar />
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );

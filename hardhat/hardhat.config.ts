@@ -31,10 +31,11 @@ const config: HardhatUserConfig = {
     },
     // Testnet Sepolia
     sepolia: {
+      // ! deployed address: 0x57349EefE4402207b78E443f5DfF15ae8ac02326
       url: `${BASE_TESTNET_RPC_URL}/${INFURA_PROJECT_ID}`,
       accounts: [PRIVATE_KEY],
-      // chainId: 11155111,
-      chainId: 84532,
+      chainId: 11155111,
+      // chainId: 84532,
     },
     // Mainnet Ethereum
     mainnet: {
