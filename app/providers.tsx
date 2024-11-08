@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { config } from "@/lib/wagmi";
 import {
   RainbowKitProvider,
@@ -25,10 +25,8 @@ const customRainbowKitTheme = merge(lightTheme(), {
   // }
 } as Theme);
 
-const queryClient = new QueryClient();
-
 export function Providers(props: { children: ReactNode }) {
-  // const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(() => new QueryClient());
 
   return (
     <WagmiProvider config={config}>
