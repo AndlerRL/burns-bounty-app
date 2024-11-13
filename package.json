@@ -61,6 +61,7 @@
     "supabase": "^1.68.6",
     "supports-color": "^9.4.0",
     "typescript": "^5.4.5",
-    "utf-8-validate": "^5.0.2"
+    "utf-8-validate": "^5.0.2",
+    "@next/bundle-analyzer": "^15.0.3"
   }
 }

@@ -1,5 +1,5 @@
 "use client";
-
+import { ReactNode, useState } from "react";
 import { config } from "@/lib/wagmi";
 import {
   RainbowKitProvider,
@@ -8,7 +8,6 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import merge from "lodash.merge";
-import { type ReactNode, useState } from "react";
 import { WagmiProvider } from "wagmi";
 
 const customRainbowKitTheme = merge(lightTheme(), {
@@ -26,14 +25,12 @@ const customRainbowKitTheme = merge(lightTheme(), {
   // }
 } as Theme);
 
-export function Providers(props: {
-  children: ReactNode;
-}) {
+export function Providers(props: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <WagmiProvider config={config}>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
           theme={customRainbowKitTheme}
           modalSize="compact"
@@ -41,7 +38,7 @@ export function Providers(props: {
         >
           {props.children}
         </RainbowKitProvider>
-      </WagmiProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }

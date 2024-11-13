@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { ChatWindow } from "@/components/ChatWindow";
 import { Button } from "@/components/base/button";
@@ -6,9 +6,9 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 export function HomeComponent() {
-  const account = useAccount()
-  const { connectors, connect, status, error } = useConnect()
-  const { disconnect } = useDisconnect()
+  const account = useAccount();
+  const { connectors, connect, status, error } = useConnect();
+  const { disconnect } = useDisconnect();
 
   const InfoCard = (
     <div className="p-4 md:p-8 rounded bg-[#25252d] w-full max-h-[85%] overflow-hidden">
@@ -89,8 +89,7 @@ export function HomeComponent() {
   return (
     <>
       <div>
-        <h2>Account</h2>
-
+        <h2 className="font-bold">Account</h2>
         <div>
           status: {account.status}
           <br />
@@ -99,15 +98,20 @@ export function HomeComponent() {
           chainId: {account.chainId}
         </div>
 
-        {account.status === 'connected' && (
-          <Button type="button" onClick={() => disconnect()}>
+        {account.status === "connected" && (
+          <Button
+            className="my-2"
+            variant="secondary"
+            type="button"
+            onClick={() => disconnect()}
+          >
             Disconnect
           </Button>
         )}
       </div>
 
-      <div>
-        <h2>Connect</h2>
+      <div className="mt-2">
+        <h2 className="mb-1 font-bold">Connect</h2>
         {/* {connectors.map((connector) => (
           <Button
             key={connector.uid}
@@ -118,8 +122,10 @@ export function HomeComponent() {
           </Button>
         ))} */}
         <ConnectButton />
-        <div>{status}</div>
-        <div>{error?.message}</div>
+        <div>
+          <p>{status}</p>
+          <p>{error?.message}</p>
+        </div>
       </div>
       <ChatWindow
         endpoint="api/chat"

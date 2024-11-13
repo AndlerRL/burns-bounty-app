@@ -1,8 +1,9 @@
 import { Public_Sans } from "next/font/google";
-import "./globals.css";
-
 import { Providers } from "@/app/providers";
 import { Navbar } from "@/components/Navbar";
+
+import "@rainbow-me/rainbowkit/styles.css";
+import "./globals.css";
 
 const publicSans = Public_Sans({ subsets: ["latin"] });
 
